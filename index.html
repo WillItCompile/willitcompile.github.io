@@ -149,31 +149,44 @@
 
 
   <div class="flames"></div>
+<script>
+const rho = 1.225;     // air density kg/m^3
+const CL = 1.0;        // extremely optimistic lift coefficient
+const INCH_TO_M = 0.0254;
+const LB_TO_N = 4.44822;
 
-  <script>
-    const xEl = document.getElementById("x");
-    const exprEl = document.getElementById("expr");
-    const resultEl = document.getElementById("result");
-    const btn = document.getElementById("calcBtn");
+document.getElementById("calcBtn").addEventListener("click", () => {
+  const lengthIn = Number(document.getElementById("length").value);
+  const girthIn = Number(document.getElementById("girth").value);
+  const weightLb = Number(document.getElementById("weight").value);
 
-    function calculate() {
-      const x = Number(xEl.value);
-      if (!Number.isFinite(x)) {
-        resultEl.textContent = "INVALID CRANK";
-        return;
-      }
+  if (![lengthIn, girthIn, weightLb].every(Number.isFinite)) {
+    document.getElementById("result").textContent = "INVALID INPUT";
+    return;
+  }
 
-      try {
-        const fn = new Function("x", `return (${exprEl.value});`);
-        const y = fn(x);
-        resultEl.textContent = Number.isFinite(y) ? y : "TOO MUCH HOG";
-      } catch {
-        resultEl.textContent = "BAD EQUATION";
-      }
-    }
+  // Convert units
+  const span = lengthIn * INCH_TO_M;
+  const chord = (girthIn / Math.PI) * INCH_TO_M;
+  const area = span * chord;
+  const weightN = weightLb * LB_TO_N;
 
-    btn.addEventListener("click", calculate);
-  </script>
+  // Solve lift equation for velocity
+  const v = Math.sqrt((2 * weightN) / (rho * area * CL));
+
+  // Assume rotation radius = half the length
+  const radius = span / 2;
+
+  // Convert to RPM
+  const rpm = (v / (2 * Math.PI * radius)) * 60;
+
+  document.getElementById("result").textContent =
+    rpm > 1e6
+      ? "STRUCTURAL FAILURE"
+      : Math.round(rpm).toLocaleString();
+});
+</script>
+
 
 </body>
 </html>
