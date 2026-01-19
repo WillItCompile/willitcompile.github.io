@@ -3,9 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CRANK YOUR HOG</title>
+  <title>CRANK YOUR HOG: LIFT-OFF DIVISION</title>
 
   <style>
+    :root {
+      --glow: 0 0 12px orange, 0 0 24px red, 0 0 48px yellow;
+    }
+
     body {
       margin: 0;
       font-family: Impact, Arial Black, sans-serif;
@@ -13,76 +17,183 @@
       color: #fff;
       overflow-x: hidden;
       text-align: center;
+      animation: backgroundPanic 2.2s linear infinite;
     }
 
+    @keyframes backgroundPanic {
+      0%   { filter: hue-rotate(0deg) saturate(1.2) contrast(1.05); }
+      50%  { filter: hue-rotate(30deg) saturate(1.8) contrast(1.2); }
+      100% { filter: hue-rotate(0deg) saturate(1.2) contrast(1.05); }
+    }
+
+    /* Global absurdity */
+    .shake {
+      animation: shake 0.35s infinite linear;
+    }
+    @keyframes shake {
+      0% { transform: translate(0,0) rotate(0deg); }
+      20% { transform: translate(2px,-2px) rotate(-0.3deg); }
+      40% { transform: translate(-2px,2px) rotate(0.3deg); }
+      60% { transform: translate(3px,1px) rotate(-0.2deg); }
+      80% { transform: translate(-1px,-3px) rotate(0.2deg); }
+      100% { transform: translate(0,0) rotate(0deg); }
+    }
+
+    /* Big title */
     h1 {
-      font-size: clamp(3rem, 8vw, 6rem);
-      margin: 20px 0;
-      text-shadow:
-        0 0 10px orange,
-        0 0 20px red,
-        0 0 40px yellow;
-      animation: pulse 1.2s infinite alternate;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      margin: 18px 0 6px;
+      text-shadow: var(--glow);
+      animation: pulse 0.75s infinite alternate, wobble 1.6s infinite ease-in-out;
+      letter-spacing: 2px;
     }
 
     @keyframes pulse {
       from { transform: scale(1); }
-      to { transform: scale(1.05); }
+      to { transform: scale(1.08); }
+    }
+    @keyframes wobble {
+      0%,100% { transform: rotate(-1deg) scale(1); }
+      50% { transform: rotate(1deg) scale(1.02); }
     }
 
     .hog {
-      font-size: 1.5rem;
+      font-size: 1.35rem;
       letter-spacing: 2px;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
       color: orange;
+      text-shadow: 0 0 10px red;
     }
 
+    .warningMarquee {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      border-top: 2px solid rgba(255,165,0,0.6);
+      border-bottom: 2px solid rgba(255,0,0,0.6);
+      background: rgba(0,0,0,0.5);
+      padding: 8px 0;
+      box-shadow: 0 0 24px rgba(255,0,0,0.35);
+      margin: 10px 0 18px;
+    }
+    .warningMarquee span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 10s linear infinite;
+      font-size: 1.05rem;
+      color: #ffd000;
+      text-shadow: 0 0 10px red;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* Card */
     .card {
-      max-width: 420px;
-      margin: 0 auto 60px;
-      background: rgba(0,0,0,0.7);
-      border: 3px solid orange;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 0 25px red;
+      max-width: 520px;
+      margin: 0 auto 140px;
+      background: rgba(0,0,0,0.72);
+      border: 4px solid orange;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 0 35px rgba(255,0,0,0.65);
+      position: relative;
+      transform: translateZ(0);
+    }
+
+    .card::before {
+      content: "⚠️ AERODYNAMIC SINS ENABLED ⚠️";
+      display: block;
+      font-size: 0.95rem;
+      color: #ffb300;
+      text-shadow: 0 0 10px red;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
     }
 
     label {
       display: block;
       margin-top: 12px;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
+      text-shadow: 0 0 10px rgba(255,0,0,0.35);
     }
 
     input {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-top: 6px;
-      font-size: 1.1rem;
-      border-radius: 8px;
+      font-size: 1.15rem;
+      border-radius: 10px;
       border: none;
+      outline: none;
+      box-shadow: 0 0 12px rgba(255,165,0,0.25);
+    }
+    input:focus {
+      box-shadow: 0 0 22px rgba(255,0,0,0.55);
     }
 
     button {
-      margin-top: 16px;
-      padding: 12px;
+      margin-top: 18px;
+      padding: 14px;
       width: 100%;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       background: linear-gradient(orange, red);
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 900;
       color: black;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 0 18px rgba(255,0,0,0.55);
+      position: relative;
+      overflow: hidden;
     }
 
-    button:hover {
-      filter: brightness(1.1);
+    button::after {
+      content: "";
+      position: absolute;
+      top: -40%;
+      left: -60%;
+      width: 50%;
+      height: 180%;
+      background: rgba(255,255,255,0.25);
+      transform: rotate(25deg);
+      animation: shine 1.2s infinite linear;
     }
+    @keyframes shine {
+      from { left: -60%; }
+      to { left: 120%; }
+    }
+
+    button:hover { filter: brightness(1.12); }
+    button:active { transform: scale(0.99); }
 
     .out {
       margin-top: 18px;
-      font-size: 1.4rem;
+      font-size: 1.25rem;
       color: yellow;
+      text-shadow: var(--glow);
+      line-height: 1.25;
+    }
+
+    #result {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.45);
+      border: 2px dashed rgba(255,165,0,0.7);
+      box-shadow: 0 0 18px rgba(255,0,0,0.35);
+      min-width: 90px;
+    }
+
+    .fineprint {
+      margin-top: 12px;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.75);
     }
 
     /* Flames */
@@ -91,35 +202,96 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 160px;
+      height: 190px;
       background:
-        repeating-radial-gradient(circle at 50% 120%, red 0 20px, orange 20px 40px, transparent 40px 60px);
-      animation: flames 1s infinite linear;
+        repeating-radial-gradient(circle at 50% 120%, red 0 22px, orange 22px 44px, transparent 44px 70px);
+      animation: flames 0.7s infinite linear;
       pointer-events: none;
-      opacity: 0.85;
+      opacity: 0.9;
+      filter: blur(0.2px);
+      z-index: 10;
     }
 
     @keyframes flames {
       from { background-position: 0 0; }
-      to { background-position: 200px 0; }
+      to { background-position: 240px 0; }
     }
 
-    /* Helicopters */
+    /* EXTRA flames layer */
+    .flames2 {
+      position: fixed;
+      bottom: 90px;
+      left: 0;
+      width: 100%;
+      height: 110px;
+      background:
+        repeating-radial-gradient(circle at 50% 120%, rgba(255,0,0,0.8) 0 14px, rgba(255,165,0,0.75) 14px 28px, transparent 28px 55px);
+      animation: flames 0.5s infinite linear reverse;
+      pointer-events: none;
+      opacity: 0.55;
+      z-index: 9;
+    }
+
+    /* Helicopters (many) */
     .heli {
       position: fixed;
-      top: 15%;
+      top: 10%;
       font-size: 3rem;
-      animation: fly 12s linear infinite;
+      animation: fly 10s linear infinite;
+      z-index: 6;
+      filter: drop-shadow(0 0 10px rgba(255,0,0,0.5));
     }
-
-    .heli.two {
-      top: 35%;
-      animation-duration: 18s;
-    }
+    .heli.two { top: 22%; animation-duration: 14s; font-size: 2.6rem; opacity: 0.9; }
+    .heli.three { top: 36%; animation-duration: 18s; font-size: 3.4rem; opacity: 0.85; }
+    .heli.four { top: 48%; animation-duration: 12s; font-size: 2.9rem; opacity: 0.8; }
+    .heli.five { top: 62%; animation-duration: 20s; font-size: 3.1rem; opacity: 0.75; }
 
     @keyframes fly {
-      from { transform: translateX(-120%); }
+      from { transform: translateX(-140%); }
       to { transform: translateX(120vw); }
+    }
+
+    /* Floating explosions */
+    .boom {
+      position: fixed;
+      font-size: 2.2rem;
+      opacity: 0.9;
+      animation: boomFloat 2.2s ease-in-out infinite alternate;
+      z-index: 7;
+      text-shadow: 0 0 14px rgba(255,165,0,0.8);
+      pointer-events: none;
+    }
+    @keyframes boomFloat {
+      from { transform: translateY(0) rotate(-5deg) scale(1); }
+      to { transform: translateY(-18px) rotate(5deg) scale(1.05); }
+    }
+
+    /* Result hype */
+    .resultHype {
+      margin-top: 12px;
+      font-size: 1.05rem;
+      color: #ffb300;
+      text-shadow: 0 0 10px red;
+      min-height: 1.2em;
+    }
+
+    /* Confetti-ish sparks */
+    .spark {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #fff;
+      opacity: 0.9;
+      pointer-events: none;
+      animation: spark 0.9s linear forwards;
+      z-index: 999;
+    }
+    @keyframes spark {
+      to {
+        transform: translate(var(--dx), var(--dy)) scale(0.2);
+        opacity: 0;
+      }
     }
   </style>
 </head>
@@ -128,71 +300,133 @@
 
   <div class="heli">🚁</div>
   <div class="heli two">🚁</div>
+  <div class="heli three">🚁</div>
+  <div class="heli four">🚁</div>
+  <div class="heli five">🚁</div>
 
-  <h1>CRANK YOUR HOG</h1>
-  <div class="hog">🔥 CRANK • CALCULATE • REPEAT 🔥</div>
+  <div class="boom" style="top: 8%; left: 6%;">💥</div>
+  <div class="boom" style="top: 16%; left: 86%;">💥</div>
+  <div class="boom" style="top: 56%; left: 10%;">🔥</div>
+  <div class="boom" style="top: 42%; left: 90%;">💥</div>
 
-<label>Length (inches)</label>
-<input id="length" type="number" step="any" placeholder="e.g. 6" />
+  <h1 class="shake">CRANK YOUR HOG</h1>
+  <div class="hog">🔥 CRANK • CALCULATE • REPEAT • ASCEND 🔥</div>
 
-<label>Girth (inches)</label>
-<input id="girth" type="number" step="any" placeholder="e.g. 5" />
+  <div class="warningMarquee">
+    <span>🚨 WARNING: THIS IS A SATIRICAL AERODYNAMICS SIMULATOR. DO NOT ACTUALLY BUILD ANYTHING BASED ON THIS. 🚨 &nbsp; 🚁🔥💥 🚨 CRANK RESPONSIBLY 🚨 &nbsp; 🚁🔥💥 </span>
+  </div>
 
-<label>Weight (lbs)</label>
-<input id="weight" type="number" step="any" placeholder="e.g. 180" />
+  <div class="card" id="card">
+    <label>Length (inches) — “span”</label>
+    <input id="length" type="number" step="any" min="0.01" placeholder="e.g. 6" />
 
-<button id="calcBtn">CRANK FOR LIFT</button>
+    <label>Girth (inches) — used to infer “chord”</label>
+    <input id="girth" type="number" step="any" min="0.01" placeholder="e.g. 5" />
 
-<div class="out">
-  REQUIRED RPM: <strong id="result">—</strong>
-</div>
+    <label>Weight (lbs) — target lift force</label>
+    <input id="weight" type="number" step="any" min="0.01" placeholder="e.g. 180" />
 
+    <button id="calcBtn">INITIATE LIFT-OFF CRANK SEQUENCE</button>
 
+    <div class="out">
+      REQUIRED RPM: <strong id="result">—</strong>
+      <div class="resultHype" id="hype"></div>
+      <div class="fineprint">
+        Uses the same exact calculations: lift equation → required airspeed → RPM via tip-speed approximation.<br>
+        Constants: ρ=1.225, C<sub>L</sub>=1.0, inch→m, lb→N.
+      </div>
+    </div>
+  </div>
+
+  <div class="flames2"></div>
   <div class="flames"></div>
-<script>
-const rho = 1.225;
-const CL = 1.0;
-const INCH_TO_M = 0.0254;
-const LB_TO_N = 4.44822;
 
-document.getElementById("calcBtn").addEventListener("click", () => {
-  const lengthStr = document.getElementById("length").value;
-  const girthStr  = document.getElementById("girth").value;
-  const weightStr = document.getElementById("weight").value;
+  <script>
+    // EXACT SAME CALCULATIONS AS YOUR CURRENT VERSION:
+    const rho = 1.225;
+    const CL = 1.0;
+    const INCH_TO_M = 0.0254;
+    const LB_TO_N = 4.44822;
 
-  const resultEl = document.getElementById("result");
+    const btn = document.getElementById("calcBtn");
+    const resultEl = document.getElementById("result");
+    const hypeEl = document.getElementById("hype");
+    const card = document.getElementById("card");
 
-  // Catch blank inputs explicitly
-  if (!lengthStr || !girthStr || !weightStr) {
-    resultEl.textContent = "FILL ALL FIELDS";
-    return;
-  }
+    function spawnSparks(count = 26) {
+      for (let i = 0; i < count; i++) {
+        const s = document.createElement("div");
+        s.className = "spark";
+        s.style.left = (Math.random() * window.innerWidth) + "px";
+        s.style.top  = (Math.random() * window.innerHeight) + "px";
+        s.style.setProperty("--dx", (Math.random() * 240 - 120) + "px");
+        s.style.setProperty("--dy", (Math.random() * 240 - 120) + "px");
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 900);
+      }
+    }
 
-  const lengthIn = Number(lengthStr);
-  const girthIn  = Number(girthStr);
-  const weightLb = Number(weightStr);
+    function hypeForRPM(rpm) {
+      if (!Number.isFinite(rpm)) return "THE MATH HAS LEFT THE CHAT.";
+      if (rpm < 1000) return "LOW RPM. THEORETICALLY CALM. SPIRITUALLY UNHINGED.";
+      if (rpm < 10000) return "DANGEROUSLY CRANKED. HELICOPTERS APPROVING.";
+      if (rpm < 100000) return "NEAR-APOCALYPTIC CRANK. HOLD ONTO REALITY.";
+      return "THE RPM IS COSMIC. THE AIR ITSELF IS FILEING A COMPLAINT.";
+    }
 
-  // Must be positive numbers
-  if (![lengthIn, girthIn, weightLb].every(n => Number.isFinite(n) && n > 0)) {
-    resultEl.textContent = "ENTER POSITIVE NUMBERS";
-    return;
-  }
+    btn.addEventListener("click", () => {
+      const lengthStr = document.getElementById("length").value;
+      const girthStr  = document.getElementById("girth").value;
+      const weightStr = document.getElementById("weight").value;
 
-  const span = lengthIn * INCH_TO_M;
-  const chord = (girthIn / Math.PI) * INCH_TO_M;
-  const area = span * chord;
-  const weightN = weightLb * LB_TO_N;
+      // Catch blank inputs explicitly
+      if (!lengthStr || !girthStr || !weightStr) {
+        resultEl.textContent = "FILL ALL FIELDS";
+        hypeEl.textContent = "YOU CANNOT LIFT OFF WITH EMPTY VALUES. THAT'S JUST FALLING.";
+        spawnSparks(10);
+        return;
+      }
 
-  const v = Math.sqrt((2 * weightN) / (rho * area * CL));
-  const radius = span / 2;
+      const lengthIn = Number(lengthStr);
+      const girthIn  = Number(girthStr);
+      const weightLb = Number(weightStr);
 
-  const rpm = (v / (2 * Math.PI * radius)) * 60;
+      // Must be positive numbers
+      if (![lengthIn, girthIn, weightLb].every(n => Number.isFinite(n) && n > 0)) {
+        resultEl.textContent = "ENTER POSITIVE NUMBERS";
+        hypeEl.textContent = "NEGATIVE LENGTH DETECTED. PHYSICS IS SCREAMING.";
+        spawnSparks(12);
+        return;
+      }
 
-  resultEl.textContent = Math.round(rpm).toLocaleString();
-});
-</script>
+      // --- SAME MATH AS BEFORE ---
+      const span = lengthIn * INCH_TO_M;
+      const chord = (girthIn / Math.PI) * INCH_TO_M;
+      const area = span * chord;
+      const weightN = weightLb * LB_TO_N;
 
+      const v = Math.sqrt((2 * weightN) / (rho * area * CL));
+      const radius = span / 2;
 
+      const rpm = (v / (2 * Math.PI * radius)) * 60;
+      // --- END SAME MATH ---
+
+      resultEl.textContent = Math.round(rpm).toLocaleString();
+      hypeEl.textContent = hypeForRPM(rpm);
+
+      // Make it feel like something "happened"
+      card.classList.add("shake");
+      spawnSparks(30);
+      setTimeout(() => card.classList.remove("shake"), 700);
+    });
+
+    // Enter key triggers
+    ["length", "girth", "weight"].forEach(id => {
+      document.getElementById(id).addEventListener("keydown", (e) => {
+        if (e.key === "Enter") btn.click();
+      });
+    });
+  </script>
 
 </body>
 </html>
