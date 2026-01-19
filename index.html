@@ -188,7 +188,7 @@ document.getElementById("calcBtn").addEventListener("click", () => {
 
   const rpm = (v / (2 * Math.PI * radius)) * 60;
 
-  resultEl.textContent = rpm > 1e6 ? "STRUCTURAL FAILURE" : Math.round(rpm).toLocaleString();
+  resultEl.textContent = Math.round(rpm).toLocaleString();
 });
 </script>
 
