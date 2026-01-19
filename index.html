@@ -3,38 +3,150 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Calculator</title>
+  <title>CRANK YOUR HOG</title>
+
   <style>
-    body { font-family: system-ui, Arial, sans-serif; max-width: 520px; margin: 40px auto; padding: 0 16px; }
-    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; }
-    label { display:block; margin-top: 12px; font-weight: 600; }
-    input { width: 100%; padding: 10px; margin-top: 6px; font-size: 16px; }
-    button { margin-top: 14px; padding: 10px 14px; font-size: 16px; cursor: pointer; }
-    .out { margin-top: 14px; font-size: 18px; }
-    .hint { color: #555; font-size: 14px; margin-top: 8px; }
-    code { background:#f6f6f6; padding:2px 6px; border-radius: 6px; }
+    body {
+      margin: 0;
+      font-family: Impact, Arial Black, sans-serif;
+      background: radial-gradient(circle at top, #111, #000);
+      color: #fff;
+      overflow-x: hidden;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 6rem);
+      margin: 20px 0;
+      text-shadow:
+        0 0 10px orange,
+        0 0 20px red,
+        0 0 40px yellow;
+      animation: pulse 1.2s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.05); }
+    }
+
+    .hog {
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      margin-bottom: 30px;
+      color: orange;
+    }
+
+    .card {
+      max-width: 420px;
+      margin: 0 auto 60px;
+      background: rgba(0,0,0,0.7);
+      border: 3px solid orange;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 0 25px red;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-size: 1.1rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      border: none;
+    }
+
+    button {
+      margin-top: 16px;
+      padding: 12px;
+      width: 100%;
+      font-size: 1.2rem;
+      background: linear-gradient(orange, red);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      color: black;
+    }
+
+    button:hover {
+      filter: brightness(1.1);
+    }
+
+    .out {
+      margin-top: 18px;
+      font-size: 1.4rem;
+      color: yellow;
+    }
+
+    /* Flames */
+    .flames {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 160px;
+      background:
+        repeating-radial-gradient(circle at 50% 120%, red 0 20px, orange 20px 40px, transparent 40px 60px);
+      animation: flames 1s infinite linear;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+
+    @keyframes flames {
+      from { background-position: 0 0; }
+      to { background-position: 200px 0; }
+    }
+
+    /* Helicopters */
+    .heli {
+      position: fixed;
+      top: 15%;
+      font-size: 3rem;
+      animation: fly 12s linear infinite;
+    }
+
+    .heli.two {
+      top: 35%;
+      animation-duration: 18s;
+    }
+
+    @keyframes fly {
+      from { transform: translateX(-120%); }
+      to { transform: translateX(120vw); }
+    }
   </style>
 </head>
+
 <body>
-  <h1>Basic Calculator</h1>
+
+  <div class="heli">🚁</div>
+  <div class="heli two">🚁</div>
+
+  <h1>CRANK YOUR HOG</h1>
+  <div class="hog">🔥 CRANK • CALCULATE • REPEAT 🔥</div>
 
   <div class="card">
-    <label for="x">Input number (x)</label>
-    <input id="x" type="number" step="any" placeholder="e.g. 10" />
+    <label for="x">INPUT NUMBER</label>
+    <input id="x" type="number" step="any" placeholder="CRANK VALUE" />
 
-    <label for="expr">Equation (use x)</label>
-    <input id="expr" type="text" placeholder="e.g. x*2 + 5" value="x*2 + 5" />
+    <label for="expr">EQUATION (use x)</label>
+    <input id="expr" type="text" value="x * 2" />
 
-    <button id="calcBtn">Calculate</button>
+    <button id="calcBtn">CRANK IT</button>
 
     <div class="out">
-      Output: <strong id="result">—</strong>
-    </div>
-
-    <div class="hint">
-      Examples: <code>x/3</code>, <code>(x+4)*1.8</code>, <code>Math.sqrt(x)</code>, <code>Math.round(x)</code>
+      OUTPUT: <strong id="result">—</strong>
     </div>
   </div>
+
+  <div class="flames"></div>
 
   <script>
     const xEl = document.getElementById("x");
@@ -42,55 +154,24 @@
     const resultEl = document.getElementById("result");
     const btn = document.getElementById("calcBtn");
 
-    function safeEvaluate(expression, x) {
-      // Allow only: numbers, whitespace, x, operators, parentheses, dot, comma, and "Math."
-      // (This prevents arbitrary JS like "alert(1)" or "fetch(...)".)
-      const ok = /^[0-9xX+\-*/().,\s]|Math\./;
-      // quick character-by-character validation
-      for (let i = 0; i < expression.length; i++) {
-        const ch = expression[i];
-        const tail = expression.slice(i);
-        if (tail.startsWith("Math.")) { i += "Math.".length - 1; continue; }
-        if (!("0123456789xX+-*/()., \t\n\r".includes(ch))) {
-          throw new Error("Only numbers, x, operators (+-*/ ), parentheses, and Math.* functions are allowed.");
-        }
-      }
-
-      // Evaluate using Function with x as an argument
-      // eslint-disable-next-line no-new-func
-      const fn = new Function("x", `return (${expression});`);
-      const y = fn(x);
-
-      if (typeof y !== "number" || !Number.isFinite(y)) {
-        throw new Error("Result is not a finite number.");
-      }
-      return y;
-    }
-
     function calculate() {
       const x = Number(xEl.value);
       if (!Number.isFinite(x)) {
-        resultEl.textContent = "Enter a valid number for x.";
-        return;
-      }
-
-      const expr = exprEl.value.trim();
-      if (!expr) {
-        resultEl.textContent = "Enter an equation.";
+        resultEl.textContent = "INVALID CRANK";
         return;
       }
 
       try {
-        const y = safeEvaluate(expr, x);
-        resultEl.textContent = y;
-      } catch (e) {
-        resultEl.textContent = e.message || "Invalid equation.";
+        const fn = new Function("x", `return (${exprEl.value});`);
+        const y = fn(x);
+        resultEl.textContent = Number.isFinite(y) ? y : "TOO MUCH HOG";
+      } catch {
+        resultEl.textContent = "BAD EQUATION";
       }
     }
 
     btn.addEventListener("click", calculate);
-    xEl.addEventListener("keydown", (e) => { if (e.key === "Enter") calculate(); });
-    exprEl.addEventListener("keydown", (e) => { if (e.key === "Enter") calculate(); });
   </script>
+
 </body>
 </html>
