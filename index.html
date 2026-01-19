@@ -187,7 +187,7 @@
     <label>Weight (lbs)</label>
     <input id="weight" type="number" step="any" min="0.01" />
 
-    <button id="calcBtn">Caluclate RPM</button>
+    <button id="calcBtn">Calculate RPM</button>
 
     <div class="out">
       REQUIRED RPM: <strong id="result">—</strong>
@@ -210,14 +210,6 @@
     const hypeEl = document.getElementById("hype");
     const card = document.getElementById("card");
 
-    function hypeForRPM(rpm) {
-      if (!Number.isFinite(rpm)) return "THE MATH HAS ESCAPED CONTAINMENT.";
-      if (rpm < 1000) return "LOW RPM. CONFIDENT BUT MISGUIDED.";
-      if (rpm < 10000) return "HIGH RPM. STRUCTURAL ANXIETY DETECTED.";
-      if (rpm < 100000) return "CRITICAL RPM. AIR IS OBJECTING.";
-      return "THE RPM IS COSMIC. REALITY IS BENDING.";
-    }
-
     btn.addEventListener("click", () => {
       const l = document.getElementById("length").value;
       const g = document.getElementById("girth").value;
@@ -234,7 +226,7 @@
       const weightLb = Number(w);
 
       if (![lengthIn, girthIn, weightLb].every(n => n > 0 && Number.isFinite(n))) {
-        hypeEl.textContent = "INVALID VALUES. PHYSICS REFUSES.";
+        hypeEl.textContent = "INVALID VALUES.";
         return;
       }
 
