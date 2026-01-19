@@ -150,42 +150,48 @@
 
   <div class="flames"></div>
 <script>
-const rho = 1.225;     // air density kg/m^3
-const CL = 1.0;        // extremely optimistic lift coefficient
+const rho = 1.225;
+const CL = 1.0;
 const INCH_TO_M = 0.0254;
 const LB_TO_N = 4.44822;
 
 document.getElementById("calcBtn").addEventListener("click", () => {
-  const lengthIn = Number(document.getElementById("length").value);
-  const girthIn = Number(document.getElementById("girth").value);
-  const weightLb = Number(document.getElementById("weight").value);
+  const lengthStr = document.getElementById("length").value;
+  const girthStr  = document.getElementById("girth").value;
+  const weightStr = document.getElementById("weight").value;
 
-  if (![lengthIn, girthIn, weightLb].every(Number.isFinite)) {
-    document.getElementById("result").textContent = "INVALID INPUT";
+  const resultEl = document.getElementById("result");
+
+  // Catch blank inputs explicitly
+  if (!lengthStr || !girthStr || !weightStr) {
+    resultEl.textContent = "FILL ALL FIELDS";
     return;
   }
 
-  // Convert units
+  const lengthIn = Number(lengthStr);
+  const girthIn  = Number(girthStr);
+  const weightLb = Number(weightStr);
+
+  // Must be positive numbers
+  if (![lengthIn, girthIn, weightLb].every(n => Number.isFinite(n) && n > 0)) {
+    resultEl.textContent = "ENTER POSITIVE NUMBERS";
+    return;
+  }
+
   const span = lengthIn * INCH_TO_M;
   const chord = (girthIn / Math.PI) * INCH_TO_M;
   const area = span * chord;
   const weightN = weightLb * LB_TO_N;
 
-  // Solve lift equation for velocity
   const v = Math.sqrt((2 * weightN) / (rho * area * CL));
-
-  // Assume rotation radius = half the length
   const radius = span / 2;
 
-  // Convert to RPM
   const rpm = (v / (2 * Math.PI * radius)) * 60;
 
-  document.getElementById("result").textContent =
-    rpm > 1e6
-      ? "STRUCTURAL FAILURE"
-      : Math.round(rpm).toLocaleString();
+  resultEl.textContent = rpm > 1e6 ? "STRUCTURAL FAILURE" : Math.round(rpm).toLocaleString();
 });
 </script>
+
 
 
 </body>
