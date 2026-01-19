@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calculator</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; max-width: 520px; margin: 40px auto; padding: 0 16px; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; }
+    label { display:block; margin-top: 12px; font-weight: 600; }
+    input { width: 100%; padding: 10px; margin-top: 6px; font-size: 16px; }
+    button { margin-top: 14px; padding: 10px 14px; font-size: 16px; cursor: pointer; }
+    .out { margin-top: 14px; font-size: 18px; }
+    .hint { color: #555; font-size: 14px; margin-top: 8px; }
+    code { background:#f6f6f6; padding:2px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>Basic Calculator</h1>
+
+  <div class="card">
+    <label for="x">Input number (x)</label>
+    <input id="x" type="number" step="any" placeholder="e.g. 10" />
+
+    <label for="expr">Equation (use x)</label>
+    <input id="expr" type="text" placeholder="e.g. x*2 + 5" value="x*2 + 5" />
+
+    <button id="calcBtn">Calculate</button>
+
+    <div class="out">
+      Output: <strong id="result">—</strong>
+    </div>
+
+    <div class="hint">
+      Examples: <code>x/3</code>, <code>(x+4)*1.8</code>, <code>Math.sqrt(x)</code>, <code>Math.round(x)</code>
+    </div>
+  </div>
+
+  <script>
+    const xEl = document.getElementById("x");
+    const exprEl = document.getElementById("expr");
+    const resultEl = document.getElementById("result");
+    const btn = document.getElementById("calcBtn");
+
+    function safeEvaluate(expression, x) {
+      // Allow only: numbers, whitespace, x, operators, parentheses, dot, comma, and "Math."
+      // (This prevents arbitrary JS like "alert(1)" or "fetch(...)".)
+      const ok = /^[0-9xX+\-*/().,\s]|Math\./;
+      // quick character-by-character validation
+      for (let i = 0; i < expression.length; i++) {
+        const ch = expression[i];
+        const tail = expression.slice(i);
+        if (tail.startsWith("Math.")) { i += "Math.".length - 1; continue; }
+        if (!("0123456789xX+-*/()., \t\n\r".includes(ch))) {
+          throw new Error("Only numbers, x, operators (+-*/ ), parentheses, and Math.* functions are allowed.");
+        }
+      }
+
+      // Evaluate using Function with x as an argument
+      // eslint-disable-next-line no-new-func
+      const fn = new Function("x", `return (${expression});`);
+      const y = fn(x);
+
+      if (typeof y !== "number" || !Number.isFinite(y)) {
+        throw new Error("Result is not a finite number.");
+      }
+      return y;
+    }
+
+    function calculate() {
+      const x = Number(xEl.value);
+      if (!Number.isFinite(x)) {
+        resultEl.textContent = "Enter a valid number for x.";
+        return;
+      }
+
+      const expr = exprEl.value.trim();
+      if (!expr) {
+        resultEl.textContent = "Enter an equation.";
+        return;
+      }
+
+      try {
+        const y = safeEvaluate(expr, x);
+        resultEl.textContent = y;
+      } catch (e) {
+        resultEl.textContent = e.message || "Invalid equation.";
+      }
+    }
+
+    btn.addEventListener("click", calculate);
+    xEl.addEventListener("keydown", (e) => { if (e.key === "Enter") calculate(); });
+    exprEl.addEventListener("keydown", (e) => { if (e.key === "Enter") calculate(); });
+  </script>
+</body>
+</html>
