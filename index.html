@@ -184,7 +184,7 @@
     <label>Girth (inches)</label>
     <input id="girth" type="number" step="any" min="0.01" />
 
-    <label>Weight (lbs)</label>
+    <label>How much do you weigh? (Lbs) </label>
     <input id="weight" type="number" step="any" min="0.01" />
 
     <button id="calcBtn">Calculate RPM</button>
@@ -213,7 +213,7 @@
     btn.addEventListener("click", () => {
       const l = document.getElementById("length").value;
       const g = document.getElementById("girth").value;
-      const w = document.getElementById("How much do you weigh?").value;
+      const w = document.getElementById("weight").value;
 
       if (!l || !g || !w) {
         resultEl.textContent = "—";
